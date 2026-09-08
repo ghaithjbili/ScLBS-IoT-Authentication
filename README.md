@@ -38,3 +38,8 @@ consumption compared to benchmark group-key protocols.
 
 ## Repository Structure
 
+
+## Authors
+
+Ghaith Jbili · Hamza Alothman
+
