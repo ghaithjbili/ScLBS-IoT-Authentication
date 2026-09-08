@@ -1,0 +1,59 @@
+(*
+   ScLBS — Formal verification of the authentication and
+   session-key establishment protocol under the Dolev-Yao model.
+
+   Transcribed from the project report (Figure: ProVerif process
+   abstraction). Verify against the original file before relying on it.
+*)
+
+(* Public channel *)
+free c : channel.
+
+(* Cryptographic primitives *)
+fun h(bitstring): bitstring.
+fun ecMul(bitstring, bitstring): bitstring.
+
+(* Secrets *)
+free chiSN : bitstring [private].
+free chiRN : bitstring [private].
+
+(* SK *)
+free SK : bitstring [private].
+
+(* Authentication events *)
+event beginAuth(bitstring).
+event endAuth(bitstring).
+
+(*
+   Security queries.
+   The report states the following properties are verified:
+     - Secrecy: the adversary cannot derive chiSN, chiRN, or SK.
+     - Authentication: every completed session corresponds to a
+       valid initiation, i.e. forall x: endAuth(x) => beginAuth(x).
+   The query block was not legible in the report figure and is
+   reconstructed here from that description — check it against the
+   original .pv file.
+*)
+query attacker(chiSN).
+query attacker(chiRN).
+query attacker(SK).
+query x: bitstring; event(endAuth(x)) ==> event(beginAuth(x)).
+
+process
+(
+(* SN *)
+new rSN: bitstring;
+let OmegaSN = ecMul(chiSN, rSN) in
+event beginAuth(OmegaSN);
+out(c, OmegaSN);
+in(c, x: bitstring);
+let SK_SN = h(OmegaSN) in
+event endAuth(SK_SN)
+)
+|
+(
+(* RN *)
+in(c, y: bitstring);
+let SK_RN = h(y) in
+out(c, SK_RN)
+)
