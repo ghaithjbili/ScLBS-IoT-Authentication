@@ -53,9 +53,10 @@ Current scope: results assume static nodes, ideal location verification,
 and homogeneous device capabilities.
 Repository Structure
 
-proverif/      ProVerif model of the authentication protocol
-docs/          Project report and presentation slides
-screenshots/   Node-RED implementation and dashboard
+sclbs.pv                   ProVerif model
+ScLBS Presentation.pdf     Slides
+report-sclbs.docx          Full report
+*.jpeg                     Node-RED implementation screenshots
 
 
 
